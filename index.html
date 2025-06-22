@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hearin'</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="music-player" class="dark-mode">
+    <div id="theme-toggle">
+      <i class="fas fa-moon"></i>
+    </div>
+    <div id="search-bar">
+      <input type="text" id="search-input" placeholder="Search for a song...">
+      <button id="search-btn"><i class="fas fa-search"></i></button>
+    </div>
+    <div id="content-container">
+      <div id="song-info">        <div id="album-art-container">
+          <img id="album-art" src="music.gif" alt="Album Art">
+          <div id="video-container"></div>
+        </div><div id="song-details">
+          <h1 id="song-title">Just relax and vibe!</h1>
+          <p id="song-artist"></p>
+        </div>
+      </div>
+      <div id="player">
+        <div id="progress-container">
+          <div id="progress-bar">
+            <div id="progress"></div>
+            <div id="wave-progress"></div>
+          </div>
+          <div id="time-display">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+          </div>
+        </div>
+        <div id="player-options">
+          <button id="loop-btn"><i class="fas fa-repeat"></i></button>
+        </div>
+        <div id="controls">
+          <button id="prev-btn"><i class="fas fa-backward-step"></i></button>
+          <button id="play-pause-btn"><i class="fas fa-play"></i></button>
+          <button id="next-btn"><i class="fas fa-forward-step"></i></button>
+        </div>
+      </div>    </div>
+    <div id="unavailable-message">
+      <code>Made by bepoooe - <a href="https://github.com/bepoooe/musi" target="_blank">GitHub Repo</a></code>
+    </div>
+  </div>
+  <audio id="audio-player" hidden></audio>
+  <script src="app.js"></script>
+</body>
+</html>
