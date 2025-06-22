@@ -573,358 +573,81 @@ body {
   #footer p {
     line-height: 1.3;
   }
-}
 
-@media (max-width: 480px) {
+  #album-art {
+    width: 200px;
+    height: 200px;
+    max-width: 80vw;
+    max-height: 80vw;
+  }
+
   #album-art-container {
-    width: 180px;
-    height: 320px;
-  }
-  
-  #song-title {
-    font-size: 22px;
-  }
-  
-  #song-artist {
-    font-size: 16px;
-  }
-  
-  #progress-container {
-    width: 115%;
-  }
-  
-  #progress-bar {
-    height: 8px;
-  }
-    #controls button {
-    padding: 16px;
-    font-size: 21px;
-  }
-  
-  #controls button:hover {
-    transform: scale(1.05) translateY(-1px);
-  }
-  
-  #play-pause-btn {
-    padding: 16px;
-  }
-  
-  #play-pause-btn:hover {
-    transform: scale(1.1);
-  }
-  
-  #search-bar {
-    padding: 3px;
-    width: 90%;
-    margin: 15px auto;
-  }
-  
-  #search-input {
-    font-size: 13px;
-    padding: 8px;
-  }
-  
-  #search-btn {
-    padding: 8px;
+    width: 200px;
+    height: 200px;
+    max-width: 80vw;
+    max-height: 80vw;
+    margin: 0 auto;
   }
 
-  #volume-control {
-    padding: 6px 10px;
-  }
-  #volume-slider {
-    width: 80px;
-  }
-
-  #search-dropdown {
-    max-height: 250px;
-    margin-top: 3px;
-  }
-
-  .dropdown-item {
-    padding: 8px;
-  }
-
-  .dropdown-image {
-    width: 35px;
-    height: 35px;
-    margin-right: 10px;
-  }
-
-  .dropdown-title {
-    font-size: 12px;
-  }
-
-  .dropdown-artist {
-    font-size: 10px;
-  }
-
-  #footer {
-    padding: 6px 10px;
-    margin-top: 8px;
-    font-size: 10px;
-  }
-
-  #footer p {
-    display: flex;
+  #song-info {
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 20px;
   }
 
-  .footer-link {
-    margin-left: 0;
-    font-size: 11px;
+  #song-details {
+    text-align: center;
+    width: 100%;
   }
-}
 
-#search-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.9);
-  border: 1px solid rgba(214, 51, 132, 0.3);
-  border-radius: 10px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  z-index: 1000;
-  margin-top: 5px;
-  max-height: 400px;
-  overflow-y: auto;
-  animation: slideDown 0.2s ease-out;
-}
-
-#search-dropdown.hidden {
-  display: none;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
+  /* Fix body and html borders */
+  body {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    margin: 0;
+    padding: 0;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-#dropdown-results {
-  padding: 10px;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
-  margin-bottom: 5px;
-}
-
-.dropdown-item:hover, .dropdown-item.selected {
-  background: rgba(214, 51, 132, 0.2);
-  border-color: #d63384;
-  transform: translateX(5px);
-  box-shadow: 0 2px 10px rgba(214, 51, 132, 0.3);
-}
-
-.dropdown-item:last-child {
-  margin-bottom: 0;
-}
-
-.dropdown-image {
-  width: 45px;
-  height: 45px;
-  border-radius: 8px;
-  margin-right: 15px;
-  object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.dropdown-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.dropdown-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #ffffff;
-  margin-bottom: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dropdown-artist {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dropdown-play-icon {
-  margin-left: 10px;
-  font-size: 16px;
-  color: #d63384;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.dropdown-item:hover .dropdown-play-icon {
-  opacity: 1;
-}
-
-.search-loading {
-  text-align: center;
-  padding: 20px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-}
-
-.search-no-results {
-  text-align: center;
-  padding: 20px;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 14px;
-}
-
-/* Update search input to have better focus state */
-#search-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(214, 51, 132, 0.3);
-}
-
-/* Scrollbar styling for dropdown */
-#search-dropdown::-webkit-scrollbar {
-  width: 6px;
-}
-
-#search-dropdown::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-
-#search-dropdown::-webkit-scrollbar-thumb {
-  background: rgba(214, 51, 132, 0.5);
-  border-radius: 3px;
-}
-
-#search-dropdown::-webkit-scrollbar-thumb:hover {
-  background: rgba(214, 51, 132, 0.7);
-}
-
-/* Footer styling */
-#footer {
-  text-align: center;
-  padding: 10px 20px;
-  margin-top: 15px;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
-}
-
-#footer p {
-  margin: 0;
-  font-weight: 300;
-  line-height: 1.4;
-}
-
-.footer-link {
-  color: #ff6b9d;
-  text-decoration: none;
-  font-weight: 400;
-  transition: all 0.2s ease;
-  margin-left: 3px;
-}
-
-.footer-link:hover {
-  color: #ffadd1;
-  text-decoration: none;
-}
-
-/* Theme-specific footer styling */
-#music-player.light-mode #footer {
-  color: rgba(51, 51, 51, 0.5);
-}
-
-#music-player.light-mode .footer-link {
-  color: #d63384;
-}
-
-#music-player.light-mode .footer-link:hover {
-  color: #b02a5b;
-}
-
-#music-player.dark-mode #footer {
-  color: rgba(255, 255, 255, 0.7);
-  border-top-color: rgba(255, 255, 255, 0.1);
-}
-
-#music-player.dark-mode .footer-link {
-  color: #ff6b9d;
-}
-
-#music-player.dark-mode .footer-link:hover {
-  color: #ffadd1;
-}
-
-/* Mobile responsive footer */
-@media (max-width: 768px) {
-  #footer {
-    padding: 8px 15px;
-    margin-top: 10px;
-    font-size: 10px;
-    background: transparent;
+  #music-player {
+    min-height: 100vh;
+    margin: 0;
     border-radius: 0;
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  #footer p {
-    line-height: 1.2;
-  }
-
-  /* Fix theme toggle for mobile */
-  #theme-toggle {
-    top: 15px;
-    right: 15px;
-    width: 42px;
-    height: 42px;
-    font-size: 18px;
   }
 }
 
 @media (max-width: 480px) {
-  #footer {
-    padding: 6px 10px;
-    margin-top: 8px;
-    font-size: 9px;
-    background: transparent;
-    border-radius: 0;
-    margin: 8px 0 0 0;
+  #album-art {
+    width: 160px;
+    height: 160px;
+    max-width: 70vw;
+    max-height: 70vw;
   }
 
-  #footer p {
-    line-height: 1.2;
+  #album-art-container {
+    width: 160px;
+    height: 160px;
+    max-width: 70vw;
+    max-height: 70vw;
+    margin: 0 auto;
   }
 
-  .footer-link {
-    margin-left: 2px;
-    font-size: 9px;
+  #song-title {
+    font-size: 18px;
+    margin-bottom: 8px;
   }
 
-  /* Better theme toggle for small mobile */
-  #theme-toggle {
-    top: 12px;
-    right: 12px;
-    width: 38px;
-    height: 38px;
-    font-size: 16px;
-    padding: 8px;
+  #song-artist {
+    font-size: 14px;
+  }
+
+  /* Ensure full coverage on small screens */
+  body {
+    overflow-x: hidden;
+  }
+
+  #music-player {
+    width: 100vw;
+    min-height: 100vh;
+    padding: 15px;
+    box-sizing: border-box;
   }
 }
