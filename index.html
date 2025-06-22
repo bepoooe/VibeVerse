@@ -12,10 +12,12 @@
   <div id="music-player" class="dark-mode">
     <div id="theme-toggle">
       <i class="fas fa-moon"></i>
-    </div>
-    <div id="search-bar">
+    </div>    <div id="search-bar">
       <input type="text" id="search-input" placeholder="Search for a song...">
       <button id="search-btn"><i class="fas fa-search"></i></button>
+      <div id="search-dropdown" class="hidden">
+        <div id="dropdown-results"></div>
+      </div>
     </div>
     <div id="content-container">
       <div id="song-info">        <div id="album-art-container">
@@ -36,19 +38,21 @@
             <span id="current-time">0:00</span>
             <span id="duration">0:00</span>
           </div>
-        </div>
-        <div id="player-options">
+        </div>        <div id="player-options">
           <button id="loop-btn"><i class="fas fa-repeat"></i></button>
+          <div id="volume-control">
+            <button id="volume-btn"><i class="fas fa-volume-up"></i></button>
+            <input type="range" id="volume-slider" min="0" max="100" value="50">
+          </div>
         </div>
         <div id="controls">
           <button id="prev-btn"><i class="fas fa-backward-step"></i></button>
           <button id="play-pause-btn"><i class="fas fa-play"></i></button>
           <button id="next-btn"><i class="fas fa-forward-step"></i></button>
-        </div>
-      </div>    </div>
-    <div id="unavailable-message">
-      <code>Made by bepoooe - <a href="https://github.com/bepoooe/musi" target="_blank">GitHub Repo</a></code>
-    </div>
+        </div>      </div>    </div>
+      <footer id="footer">
+      <p>Made by bepoooe - <a href="https://github.com/bepoooe/hearin-" target="_blank" class="footer-link">Learn More</a></p>
+    </footer>
   </div>
   <audio id="audio-player" hidden></audio>
   <script src="app.js"></script>
