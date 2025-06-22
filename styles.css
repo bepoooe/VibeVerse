@@ -538,6 +538,7 @@ body {
     justify-content: center;
     max-width: 200px;
   }
+
   #volume-slider {
     width: 100px;
   }
@@ -564,14 +565,30 @@ body {
     font-size: 11px;
   }
 
-  #footer {
-    padding: 8px 15px;
-    margin-top: 10px;
-    font-size: 11px;
+  /* Fix theme toggle for mobile */
+  #theme-toggle {
+    top: 15px;
+    right: 15px;
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
   }
 
-  #footer p {
-    line-height: 1.3;
+  /* Remove secondary layout card */
+  #music-player {
+    background: transparent;
+    min-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
   }
 
   #album-art {
@@ -598,19 +615,6 @@ body {
   #song-details {
     text-align: center;
     width: 100%;
-  }
-
-  /* Fix body and html borders */
-  body {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    margin: 0;
-    padding: 0;
-  }
-
-  #music-player {
-    min-height: 100vh;
-    margin: 0;
-    border-radius: 0;
   }
 }
 
@@ -639,15 +643,84 @@ body {
     font-size: 14px;
   }
 
-  /* Ensure full coverage on small screens */
-  body {
-    overflow-x: hidden;
+  /* Better theme toggle for small mobile */
+  #theme-toggle {
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+    padding: 8px;
   }
 
+  /* Remove secondary layout and ensure full coverage */
   #music-player {
+    background: transparent;
     width: 100vw;
     min-height: 100vh;
     padding: 15px;
     box-sizing: border-box;
+    margin: 0;
+    border-radius: 0;
   }
+
+  body {
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Footer styling - same for all devices */
+#footer {
+  text-align: center;
+  padding: 10px 20px;
+  margin-top: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+#footer p {
+  margin: 0;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.footer-link {
+  color: #ff6b9d;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  margin-left: 3px;
+}
+
+.footer-link:hover {
+  color: #ffadd1;
+  text-decoration: none;
+}
+
+/* Theme-specific footer styling */
+#music-player.light-mode #footer {
+  color: rgba(51, 51, 51, 0.5);
+}
+
+#music-player.light-mode .footer-link {
+  color: #d63384;
+}
+
+#music-player.light-mode .footer-link:hover {
+  color: #b02a5b;
+}
+
+#music-player.dark-mode #footer {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+#music-player.dark-mode .footer-link {
+  color: #ff6b9d;
+}
+
+#music-player.dark-mode .footer-link:hover {
+  color: #ffadd1;
 }
