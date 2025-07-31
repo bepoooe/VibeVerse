@@ -46,15 +46,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateLikeBtn(song) {
-        if (!likeBtn || !song) return;
-        if (isSongLiked(song)) {
+        if (!likeBtn) return;
+        if (song && audioPlayer.src) {
             likeBtn.classList.add('active');
-            likeBtn.querySelector('i').classList.remove('fa-regular');
-            likeBtn.querySelector('i').classList.add('fa-solid');
+            if (isSongLiked(song)) {
+                likeBtn.querySelector('i').classList.remove('fa-regular');
+                likeBtn.querySelector('i').classList.add('fa-solid');
+            } else {
+                likeBtn.querySelector('i').classList.remove('fa-solid');
+                likeBtn.querySelector('i').classList.add('fa-regular');
+            }
         } else {
             likeBtn.classList.remove('active');
-            likeBtn.querySelector('i').classList.remove('fa-solid');
-            likeBtn.querySelector('i').classList.add('fa-regular');
         }
         // Also update modal list if open
         if (typeof renderLikedSongsList === 'function' && likedSongsModal && !likedSongsModal.classList.contains('hidden')) {
@@ -400,6 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
             songArtist.textContent = decodeHtmlEntities(song.artists?.primary?.[0]?.name || "Unknown");
             albumArt.src = thumb || 'music.gif';
             updateLikeBtn(song);
+            likeBtn && likeBtn.classList.add('active');
             audioPlayer.play()
                 .then(() => {
                     isPlaying = true;
@@ -412,6 +416,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         } else {
             updateUnavailableMessage("No playable CDN link found");
+            likeBtn && likeBtn.classList.remove('active');
+            updateLikeBtn(null);
         }
     }
     
@@ -420,6 +426,12 @@ document.addEventListener('DOMContentLoaded', function() {
             playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         } else {
             playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        }
+        // Hide like button if nothing is playing
+        if (likeBtn) {
+            if (!audioPlayer.src || !isPlaying) {
+                likeBtn.classList.remove('active');
+            }
         }
     }
     
