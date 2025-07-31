@@ -1,8 +1,8 @@
-/* Back to Home button styles */
+/* Back to Home button styles - Responsive */
 #back-home-btn {
   position: absolute;
-  top: 24px;
-  left: 32px;
+  top: 50px; /* Align with search bar */
+  left: 7.5%; /* Align with search bar's left edge (search bar is centered with width 85%) */
   z-index: 100;
   display: flex;
   align-items: center;
@@ -17,10 +17,22 @@
   box-shadow: 0 2px 8px rgba(214, 51, 132, 0.10);
   transition: all 0.3s;
   cursor: pointer;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  min-height: 44px; /* Minimum touch target size */
+}
+
+@media (max-width: 900px) {
+  #back-home-btn {
+    top: 15px;
+    left: 15px;
+  }
 }
 #back-home-btn i {
   font-size: 18px;
+  flex-shrink: 0; /* Prevent icon from shrinking */
 }
+
 #back-home-btn:hover {
   background: linear-gradient(135deg, #d63384, #ff6b9d);
   color: #fff;
@@ -28,6 +40,216 @@
   box-shadow: 0 4px 16px rgba(214, 51, 132, 0.18);
   transform: scale(1.04);
 }
+
+/* Tablet responsiveness */
+@media (max-width: 768px) {
+  #back-home-btn {
+    top: 15px;
+    left: 15px;
+    padding: 8px 16px 8px 12px;
+    font-size: 14px;
+    border-radius: 20px;
+    gap: 6px;
+    min-height: 42px;
+  }
+  
+  #back-home-btn i {
+    font-size: 16px;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  #back-home-btn {
+    display: none !important;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 320px) {
+  #back-home-btn {
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px 5px 8px;
+    font-size: 12px;
+    border-radius: 16px;
+    gap: 3px;
+    min-height: 38px;
+  }
+  
+  #back-home-btn i {
+    font-size: 13px;
+  }
+}
+
+/* Landscape orientation for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  #back-home-btn {
+    top: 10px;
+    left: 10px;
+    padding: 5px 12px 5px 8px;
+    font-size: 12px;
+    border-radius: 16px;
+    gap: 4px;
+    min-height: 36px;
+  }
+  
+  #back-home-btn i {
+    font-size: 12px;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  #back-home-btn {
+    border-width: 0.5px;
+  }
+}
+
+/* Ensure button doesn't interfere with other elements */
+#back-home-btn {
+  pointer-events: auto;
+  user-select: none;
+}
+
+/* Focus state for accessibility */
+#back-home-btn:focus {
+  outline: 2px solid #ff6b9d;
+  outline-offset: 2px;
+}
+
+/* Active state for better touch feedback */
+#back-home-btn:active {
+  transform: scale(0.98);
+  transition-duration: 0.1s;
+}
+/* Search Bar Styles */
+#search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin: 15px;
+  position: relative;
+  z-index: 10;
+}
+
+#search-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: #ff6b9d;
+  box-shadow: 0 0 0 2px rgba(255, 107, 157, 0.2);
+}
+
+#search-btn {
+  background: linear-gradient(135deg, #d63384, #ff6b9d);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#search-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(214, 51, 132, 0.4);
+}
+
+/* Search dropdown */
+#search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(30, 30, 30, 0.95);
+  border-radius: 12px;
+  margin: 5px 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+#search-dropdown.hidden {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #search-bar {
+    padding: 10px;
+    margin: 10px;
+    gap: 8px;
+  }
+  
+  #search-input {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  #search-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .navbar-icons {
+    gap: 5px;
+  }
+  
+  .navbar-heart-minimal {
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  #search-bar {
+    flex-wrap: wrap;
+    padding: 8px;
+  }
+  
+  #search-input {
+    order: 1;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  #search-btn {
+    order: 2;
+  }
+  
+  .navbar-icons {
+    order: 3;
+    margin-left: auto;
+  }
+  
+  .navbar-heart-minimal {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+}
+
 /* Hide like button by default */
 #like-btn {
   display: none;
