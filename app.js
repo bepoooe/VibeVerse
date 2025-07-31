@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Back to Home button logic
+    const backHomeBtn = document.getElementById('back-home-btn');
+    if (backHomeBtn) {
+        backHomeBtn.addEventListener('click', function() {
+            window.location.reload();
+        });
+    }
     const musicPlayer = document.getElementById('music-player');
     const themeToggle = document.getElementById('theme-toggle');
     const searchInput = document.getElementById('search-input');
