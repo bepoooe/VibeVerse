@@ -13,12 +13,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const durationDisplay = document.getElementById('duration');
     const playPauseBtn = document.getElementById('play-pause-btn');
     const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');    const audioPlayer = document.getElementById('audio-player');
-    const unavailableMessage = document.getElementById('unavailable-message');
-    const loopBtn = document.getElementById('loop-btn');    const volumeBtn = document.getElementById('volume-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const audioPlayer = document.getElementById('audio-player');
+    const loopBtn = document.getElementById('loop-btn');
+    const volumeBtn = document.getElementById('volume-btn');
     const volumeSlider = document.getElementById('volume-slider');
     const searchDropdown = document.getElementById('search-dropdown');
-    const dropdownResults = document.getElementById('dropdown-results');    let currentSongIndex = 0;
+    const dropdownResults = document.getElementById('dropdown-results');
+    const likeBtn = document.getElementById('like-btn');
+    const likedSongsBtn = document.getElementById('liked-songs-btn');
+    let currentSongIndex = 0;
     let songs = [];
     let isPlaying = false;
     let loopState = 0;
@@ -28,6 +32,130 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentVolume = 0.5;
     let searchTimeout = null;
     let selectedDropdownIndex = -1;
+    let likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+    let showingLikedSongs = false;
+    // --- Liked Songs Feature ---
+    function getSongId(song) {
+        // Use a unique property for id, fallback to name+artist
+        return song.id || song._id || (song.name + '|' + (song.artists?.primary?.[0]?.name || ''));
+    }
+
+    function isSongLiked(song) {
+        const id = getSongId(song);
+        return likedSongs.some(s => getSongId(s) === id);
+    }
+
+    function updateLikeBtn(song) {
+        if (!likeBtn || !song) return;
+        if (isSongLiked(song)) {
+            likeBtn.classList.add('active');
+            likeBtn.querySelector('i').classList.remove('fa-regular');
+            likeBtn.querySelector('i').classList.add('fa-solid');
+        } else {
+            likeBtn.classList.remove('active');
+            likeBtn.querySelector('i').classList.remove('fa-solid');
+            likeBtn.querySelector('i').classList.add('fa-regular');
+        }
+        // Also update modal list if open
+        if (typeof renderLikedSongsList === 'function' && likedSongsModal && !likedSongsModal.classList.contains('hidden')) {
+            renderLikedSongsList();
+        }
+    }
+
+    function saveLikedSongs() {
+        localStorage.setItem('likedSongs', JSON.stringify(likedSongs));
+    }
+
+    if (likeBtn) {
+        likeBtn.addEventListener('click', function() {
+            const song = songs[currentSongIndex];
+            if (!song) return;
+            const id = getSongId(song);
+            if (isSongLiked(song)) {
+                likedSongs = likedSongs.filter(s => getSongId(s) !== id);
+            } else {
+                likedSongs.unshift(song);
+            }
+            saveLikedSongs();
+            updateLikeBtn(song);
+        });
+    }
+
+    // --- Modal logic ---
+    const likedSongsModal = document.getElementById('liked-songs-modal');
+    const likedSongsList = document.getElementById('liked-songs-list');
+    const closeLikedSongs = document.getElementById('close-liked-songs');
+
+    function openLikedSongsModal() {
+        if (!likedSongsModal) return;
+        renderLikedSongsList();
+        likedSongsModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLikedSongsModal() {
+        if (!likedSongsModal) return;
+        likedSongsModal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    if (likedSongsBtn) {
+        likedSongsBtn.addEventListener('click', function() {
+            openLikedSongsModal();
+        });
+    }
+    if (closeLikedSongs) {
+        closeLikedSongs.addEventListener('click', closeLikedSongsModal);
+    }
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && likedSongsModal && !likedSongsModal.classList.contains('hidden')) {
+            closeLikedSongsModal();
+        }
+    });
+
+    function renderLikedSongsList() {
+        if (!likedSongsList) return;
+        likedSongsList.innerHTML = '';
+        if (likedSongs.length === 0) {
+            likedSongsList.innerHTML = '<div class="liked-songs-list-empty">No liked songs yet!</div>';
+            return;
+        }
+        likedSongs.forEach((song, idx) => {
+            const item = document.createElement('div');
+            item.className = 'liked-song-item';
+            item.title = song.name;
+            // Play on click (not on heart click)
+            item.addEventListener('click', (e) => {
+                if (e.target.closest('.liked-song-like-btn')) return;
+                songs = [...likedSongs];
+                currentSongIndex = idx;
+                playSong(song);
+                closeLikedSongsModal();
+            });
+            const thumb = song.image?.find(img => img.quality === '150x150')?.url || song.image?.find(img => img.quality === '500x500')?.url || 'music.gif';
+            item.innerHTML = `
+                <img class="liked-song-thumb" src="${thumb}" alt="Album Art" onerror="this.src='music.gif'">
+                <div class="liked-song-info">
+                  <div class="liked-song-title">${decodeHtmlEntities(song.name)}</div>
+                  <div class="liked-song-artist">${decodeHtmlEntities(song.artists?.primary?.[0]?.name || 'Unknown')}</div>
+                </div>
+                <button class="liked-song-like-btn liked" title="Remove from liked"><i class="fa-solid fa-heart"></i></button>
+            `;
+            // Remove from liked
+            item.querySelector('.liked-song-like-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = getSongId(song);
+                likedSongs = likedSongs.filter(s => getSongId(s) !== id);
+                saveLikedSongs();
+                renderLikedSongsList();
+                // If currently playing song is unliked, update likeBtn
+                if (songs[currentSongIndex] && getSongId(songs[currentSongIndex]) === id) {
+                    updateLikeBtn(songs[currentSongIndex]);
+                }
+            });
+            likedSongsList.appendChild(item);
+        });
+    }
 
     function loadCustomSongs() {
         const script = document.createElement('script');
@@ -254,9 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function playSong(song) {
         const downloads = song.downloadUrl || [];
         let audioUrl = null;
-        
         const qualityPriority = ["320kbps", "160kbps", "96kbps"];
-        
         for (const quality of qualityPriority) {
             const cdn = downloads.find(dl => 
                 dl.quality === quality && (dl.url.includes("aac.saavncdn.com") || dl.url.startsWith("http"))
@@ -266,15 +392,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 break;
             }
         }
-          if (audioUrl) {
+        if (audioUrl) {
             audioPlayer.src = audioUrl;
             audioPlayer.volume = currentVolume; // Ensure volume is maintained
             const thumb = song.image?.find(img => img.quality === "500x500")?.url || "";
-            
             songTitle.textContent = decodeHtmlEntities(song.name);
             songArtist.textContent = decodeHtmlEntities(song.artists?.primary?.[0]?.name || "Unknown");
             albumArt.src = thumb || 'music.gif';
-            
+            updateLikeBtn(song);
             audioPlayer.play()
                 .then(() => {
                     isPlaying = true;
@@ -352,9 +477,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Show/hide unavailable message only when needed
     function updateUnavailableMessage(message) {
-        unavailableMessage.innerHTML = `<code>${message}</code>`;
+        let msgDiv = document.getElementById('unavailable-message');
+        if (!msgDiv) {
+            // Insert after #player-options for best visibility
+            const player = document.getElementById('player');
+            if (player) {
+                msgDiv = document.createElement('div');
+                msgDiv.id = 'unavailable-message';
+                player.insertBefore(msgDiv, player.firstChild);
+            }
+        }
+        if (msgDiv) {
+            if (message) {
+                msgDiv.style.display = '';
+                msgDiv.innerHTML = `<code>${message}</code>`;
+            } else {
+                msgDiv.style.display = 'none';
+                msgDiv.innerHTML = '';
+            }
+        }
     }
+
+    // Hide message by default on load
+    updateUnavailableMessage('');
     
     audioPlayer.addEventListener('ended', function() {
         if (loopState === 1) {

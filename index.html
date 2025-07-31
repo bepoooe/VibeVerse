@@ -24,7 +24,10 @@
           <img id="album-art" src="music.gif" alt="Album Art">
           <div id="video-container"></div>
         </div><div id="song-details">
-          <h1 id="song-title">Just relax and vibe!</h1>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <h1 id="song-title">Just relax and vibe!</h1>
+            <button id="like-btn" title="Like this song" class="icon-btn"><i class="fa-regular fa-heart"></i></button>
+          </div>
           <p id="song-artist"></p>
         </div>
       </div>
@@ -50,6 +53,19 @@
           <button id="play-pause-btn"><i class="fas fa-play"></i></button>
           <button id="next-btn"><i class="fas fa-forward-step"></i></button>
         </div>      </div>    </div>
+      <button id="liked-songs-btn" class="icon-btn liked-songs-btn" title="Show liked songs"><i class="fa-solid fa-heart"></i> Liked Songs</button>
+
+      <!-- Liked Songs Modal -->
+      <div id="liked-songs-modal" class="liked-songs-modal hidden">
+        <div class="liked-songs-modal-content">
+          <div class="liked-songs-modal-header">
+            <h2><i class="fa-solid fa-heart"></i> Liked Songs</h2>
+            <button id="close-liked-songs" class="icon-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div id="liked-songs-list" class="liked-songs-list"></div>
+        </div>
+      </div>
+
       <footer id="footer">
       <p>Made by bepoooe - <a href="https://github.com/bepoooe/hearin-" target="_blank" class="footer-link">Learn More</a></p>
     </footer>
