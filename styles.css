@@ -1,3 +1,104 @@
+/* Minimal, aesthetic navbar icons group */
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+/* Minimal heart button for navbar */
+.navbar-heart-minimal {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  margin-left: 10px;
+  flex-shrink: 0;
+  font-size: 22px;
+  transition: all 0.3s ease;
+  position: relative;
+  top: 9px;
+}
+.navbar-heart-minimal i.fa-heart {
+  color: #ff6b9d;
+  font-size: 20px;
+  transition: color 0.18s, text-shadow 0.18s;
+}
+.navbar-heart-minimal:hover {
+  background: linear-gradient(135deg, #d63384 60%, #ff6b9d 100%);
+  border-color: #ff6b9d;
+  box-shadow: 0 4px 16px #ff6b9d33;
+  transform: scale(1.09) translateY(-1px);
+}
+.navbar-heart-minimal:hover i.fa-heart {
+  color: #fff;
+  text-shadow: 0 2px 8px #d63384;
+}
+.navbar-heart-minimal:active {
+  transform: scale(0.97);
+}
+.navbar-heart-minimal:focus {
+  outline: 2px solid #ff6b9d;
+  outline-offset: 2px;
+}
+/* Enhanced navbar liked songs button */
+.navbar-heart {
+  position: relative;
+  overflow: visible;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.navbar-heart-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d63384 60%, #ff6b9d 100%);
+  opacity: 0.18;
+  z-index: 0;
+  transition: opacity 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 10px rgba(214, 51, 132, 0.18);
+}
+.navbar-heart i.fa-heart {
+  position: relative;
+  z-index: 1;
+  color: #ff6b9d;
+  font-size: 22px;
+  filter: drop-shadow(0 2px 8px #d6338433);
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.navbar-heart:hover {
+  transform: scale(1.13) translateY(-2px);
+  box-shadow: 0 4px 18px #d6338455;
+}
+.navbar-heart:hover .navbar-heart-bg {
+  opacity: 0.32;
+  box-shadow: 0 6px 24px #ff6b9d55;
+}
+.navbar-heart:active {
+  transform: scale(1.05);
+}
+.navbar-heart:focus {
+  outline: 2px solid #ff6b9d;
+  outline-offset: 2px;
+}
 /* Liked Songs Modal Overlay */
 .liked-songs-modal {
   position: fixed;

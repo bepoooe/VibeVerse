@@ -12,8 +12,13 @@
     <div id="search-bar">
       <input type="text" id="search-input" placeholder="Search for a song...">
       <button id="search-btn"><i class="fas fa-search"></i></button>
-      <div id="theme-toggle">
-        <i class="fas fa-moon"></i>
+      <div class="navbar-icons">
+        <div id="theme-toggle">
+          <i class="fas fa-moon"></i>
+        </div>
+        <button id="liked-songs-btn" class="icon-btn liked-songs-btn navbar-heart-minimal" title="Show liked songs">
+          <i class="fa-solid fa-heart"></i>
+        </button>
       </div>
       <div id="search-dropdown" class="hidden">
         <div id="dropdown-results"></div>
@@ -53,7 +58,7 @@
           <button id="play-pause-btn"><i class="fas fa-play"></i></button>
           <button id="next-btn"><i class="fas fa-forward-step"></i></button>
         </div>      </div>    </div>
-      <button id="liked-songs-btn" class="icon-btn liked-songs-btn" title="Show liked songs"><i class="fa-solid fa-heart"></i> Liked Songs</button>
+
 
       <!-- Liked Songs Modal -->
       <div id="liked-songs-modal" class="liked-songs-modal hidden">
