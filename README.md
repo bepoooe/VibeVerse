@@ -53,4 +53,4 @@ This project is open source and available under the MIT License.
 
 ## Credits
 
-Developed by bepoooe. Contributions welcome.
+Developed by bepoooe. 
