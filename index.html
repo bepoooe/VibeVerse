@@ -6,78 +6,289 @@
   <title>VibeVerse</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles-new.css">
 </head>
   <body>
-    <button id="back-home-btn" class="icon-btn back-home-btn" title="Back to Home"><i class="fas fa-arrow-left"></i> Home</button>
+    <!-- Mobile Menu Toggle -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    
     <div id="music-player" class="dark-mode">
-    <div id="search-bar">
-      <input type="text" id="search-input" placeholder="Search for a song...">
-      <button id="search-btn"><i class="fas fa-search"></i></button>
-      <div class="navbar-icons">
-        <div id="theme-toggle">
-          <i class="fas fa-moon"></i>
+      <!-- Sidebar Overlay for Mobile -->
+      <div id="sidebar-overlay" class="sidebar-overlay"></div>
+      
+      <!-- Sidebar Navigation -->
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h1 class="logo">VibeVerse</h1>
         </div>
-        <button id="liked-songs-btn" class="icon-btn liked-songs-btn navbar-heart-minimal" title="Show liked songs">
-          <i class="fa-solid fa-heart"></i>
+        
+        <nav class="sidebar-nav">
+          <ul class="nav-list">
+            <li><a href="#" data-section="home" class="nav-item active"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li><a href="#" data-section="search" class="nav-item"><i class="fas fa-search"></i><span>Search</span></a></li>
+            <li><a href="#" data-section="library" class="nav-item"><i class="fas fa-book"></i><span>Your Library</span></a></li>
+          </ul>
+          
+          <div class="nav-divider"></div>
+          
+          <ul class="nav-list">
+            <li><a href="#" id="create-playlist-btn" class="nav-item"><i class="fas fa-plus"></i><span>Create Playlist</span></a></li>
+            <li><a href="#" id="liked-songs-nav" class="nav-item"><i class="fas fa-heart"></i><span>Liked Songs</span></a></li>
+          </ul>
+          
+          <div class="nav-divider"></div>
+          
+          <div class="playlists-section">
+            <h3 class="section-title">Your Playlists</h3>
+            <ul id="playlists-list" class="playlists-list"></ul>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <button id="theme-toggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+            <span>Dark Mode</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main id="main-content" class="main-content">
+        <!-- Sidebar Expand Button (shown when sidebar is collapsed) -->
+        <button id="sidebar-expand-btn" class="sidebar-expand-btn hidden">
+          <i class="fas fa-chevron-right"></i>
+          <span>Expand Sidebar</span>
         </button>
-      </div>
-      <div id="search-dropdown" class="hidden">
-        <div id="dropdown-results"></div>
-      </div>
-    </div>
-    <div id="content-container">
-      <div id="song-info">        <div id="album-art-container">
-          <img id="album-art" src="music.gif" alt="Album Art">
-          <div id="video-container"></div>
-        </div><div id="song-details">
-          <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <h1 id="song-title">Just relax and vibe!</h1>
-            <button id="like-btn" title="Like this song" class="icon-btn"><i class="fa-regular fa-heart"></i></button>
+        
+        <!-- Search Bar (shown when search section is active) -->
+        <div id="search-section" class="content-section hidden">
+          <div id="search-bar" class="search-container">
+            <div class="search-input-wrapper">
+              <input type="text" id="search-input" placeholder="What do you want to listen to?">
+              <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div id="search-dropdown" class="hidden">
+              <div id="dropdown-results"></div>
+            </div>
           </div>
-          <p id="song-artist"></p>
+          <div id="search-results" class="search-results"></div>
         </div>
-      </div>
-      <div id="player">
-        <div id="progress-container">
-          <div id="progress-bar">
-            <div id="progress"></div>
-            <div id="wave-progress"></div>
+
+        <!-- Home Section -->
+        <div id="home-section" class="content-section active">
+          <div class="section-header">
+            <h2>Good evening</h2>
           </div>
-          <div id="time-display">
-            <span id="current-time">0:00</span>
-            <span id="duration">0:00</span>
+          
+          <div id="quick-picks" class="quick-picks">
+            <h3>Made for you</h3>
+            <div id="quick-picks-grid" class="grid-container"></div>
           </div>
-        </div>        <div id="player-options">
-          <button id="loop-btn"><i class="fas fa-repeat"></i></button>
-          <div id="volume-control">
-            <button id="volume-btn"><i class="fas fa-volume-up"></i></button>
-            <input type="range" id="volume-slider" min="0" max="100" value="50">
+          
+          <div id="recently-played" class="recently-played">
+            <h3>Recently played</h3>
+            <div id="recently-played-grid" class="grid-container"></div>
           </div>
         </div>
-        <div id="controls">
-          <button id="prev-btn"><i class="fas fa-backward-step"></i></button>
-          <button id="play-pause-btn"><i class="fas fa-play"></i></button>
-          <button id="next-btn"><i class="fas fa-forward-step"></i></button>
-        </div>      </div>    </div>
 
+        <!-- Library Section -->
+        <div id="library-section" class="content-section hidden">
+          <div class="section-header">
+            <h2>Your Library</h2>
+            <div class="library-filters">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="playlists">Playlists</button>
+              <button class="filter-btn" data-filter="liked">Liked Songs</button>
+            </div>
+          </div>
+          <div id="library-content" class="library-content"></div>
+        </div>
+      </main>
+      <!-- Bottom Music Player -->
+      <div id="now-playing" class="now-playing-bar">
+        <div class="now-playing-left">
+          <div id="current-track-info" class="track-info">
+            <img id="current-album-art" src="music.gif" alt="Album Art" class="current-track-image">
+            <div class="track-details">
+              <div id="current-song-title" class="track-title">Just relax and vibe!</div>
+              <div id="current-song-artist" class="track-artist"></div>
+            </div>
+            <button id="like-btn" title="Like this song" class="icon-btn like-btn">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
 
+        <div class="now-playing-center">
+          <div id="controls" class="player-controls">
+            <button id="shuffle-btn" class="control-btn"><i class="fas fa-shuffle"></i></button>
+            <button id="prev-btn" class="control-btn"><i class="fas fa-backward-step"></i></button>
+            <button id="play-pause-btn" class="control-btn play-btn"><i class="fas fa-play"></i></button>
+            <button id="next-btn" class="control-btn"><i class="fas fa-forward-step"></i></button>
+            <button id="loop-btn" class="control-btn"><i class="fas fa-repeat"></i></button>
+          </div>
+          
+          <div id="progress-container" class="progress-container">
+            <span id="current-time" class="time-display">0:00</span>
+            <div id="progress-bar" class="progress-bar">
+              <div id="progress" class="progress"></div>
+              <div id="wave-progress" class="wave-progress"></div>
+            </div>
+            <span id="duration" class="time-display">0:00</span>
+          </div>
+        </div>
+
+        <div class="now-playing-right">
+          <div id="volume-control" class="volume-control">
+            <button id="volume-btn" class="control-btn"><i class="fas fa-volume-up"></i></button>
+            <input type="range" id="volume-slider" min="0" max="100" value="50" class="volume-slider">
+          </div>
+          <button id="fullscreen-btn" class="control-btn"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+
+      <!-- Modals -->
       <!-- Liked Songs Modal -->
-      <div id="liked-songs-modal" class="liked-songs-modal hidden">
-        <div class="liked-songs-modal-content">
-          <div class="liked-songs-modal-header">
+      <div id="liked-songs-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
             <h2><i class="fa-solid fa-heart"></i> Liked Songs</h2>
             <button id="close-liked-songs" class="icon-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
           </div>
-          <div id="liked-songs-list" class="liked-songs-list"></div>
+          <div id="liked-songs-list" class="track-list"></div>
         </div>
       </div>
 
-      <footer id="footer">
-      <p>Made by bepoooe - <a href="https://github.com/bepoooe/hearin-" target="_blank" class="footer-link">Learn More</a></p>
-    </footer>
-  </div>
-  <audio id="audio-player" hidden></audio>
-  <script src="app.js"></script>
-</body>
+      <!-- Create Playlist Modal -->
+      <div id="create-playlist-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Create Playlist</h2>
+            <button id="close-create-playlist" class="icon-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="playlist-name">Playlist Name</label>
+              <input type="text" id="playlist-name" placeholder="My Playlist #1" maxlength="50">
+            </div>
+            <div class="form-group">
+              <label for="playlist-description">Description (optional)</label>
+              <textarea id="playlist-description" placeholder="Add an optional description" rows="3" maxlength="200"></textarea>
+            </div>
+            <div class="modal-actions">
+              <button id="cancel-create-playlist" class="btn btn-secondary">Cancel</button>
+              <button id="confirm-create-playlist" class="btn btn-primary">Create</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add to Playlist Modal -->
+      <div id="add-to-playlist-modal" class="modal hidden">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Add to Playlist</h2>
+            <button id="close-add-to-playlist" class="icon-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div class="modal-body">
+            <div class="add-to-playlist-song-info">
+              <img id="add-to-playlist-image" src="music.gif" alt="Song" class="add-to-playlist-image">
+              <div class="add-to-playlist-details">
+                <div id="add-to-playlist-title" class="add-to-playlist-title">Song Title</div>
+                <div id="add-to-playlist-artist" class="add-to-playlist-artist">Artist</div>
+              </div>
+            </div>
+            <div class="playlist-selection">
+              <h3>Select a playlist:</h3>
+              <div id="playlist-options" class="playlist-options">
+                <div class="create-new-playlist-option">
+                  <button id="create-new-playlist-option" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i>
+                    Create New Playlist
+                  </button>
+                </div>
+                <div id="existing-playlists" class="existing-playlists"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Song Context Menu -->
+      <div id="song-context-menu" class="context-menu hidden">
+        <div class="context-menu-item" data-action="play">
+          <i class="fas fa-play"></i>
+          <span>Play</span>
+        </div>
+        <div class="context-menu-item" data-action="add-to-queue">
+          <i class="fas fa-list"></i>
+          <span>Add to Queue</span>
+        </div>
+        <div class="context-menu-item" data-action="add-to-playlist">
+          <i class="fas fa-plus"></i>
+          <span>Add to Playlist</span>
+        </div>
+        <div class="context-menu-item" data-action="like">
+          <i class="fas fa-heart"></i>
+          <span>Like</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item" data-action="copy-link">
+          <i class="fas fa-link"></i>
+          <span>Copy Song Link</span>
+        </div>
+      </div>
+
+      <!-- Fullscreen Player Modal -->
+      <div id="fullscreen-player" class="fullscreen-player hidden">
+        <div class="fullscreen-header">
+          <button id="close-fullscreen" class="icon-btn"><i class="fas fa-chevron-down"></i></button>
+          <span class="playing-from">Playing from playlist</span>
+        </div>
+        
+        <div class="fullscreen-content">
+          <div class="fullscreen-album-art">
+            <img id="fullscreen-album-art" src="music.gif" alt="Album Art">
+          </div>
+          
+          <div class="fullscreen-info">
+            <div class="fullscreen-track-info">
+              <h1 id="fullscreen-song-title">Just relax and vibe!</h1>
+              <p id="fullscreen-song-artist"></p>
+            </div>
+            
+            <div class="fullscreen-progress">
+              <div id="fullscreen-progress-bar" class="progress-bar">
+                <div id="fullscreen-progress" class="progress"></div>
+              </div>
+              <div class="time-info">
+                <span id="fullscreen-current-time">0:00</span>
+                <span id="fullscreen-duration">0:00</span>
+              </div>
+            </div>
+            
+            <div class="fullscreen-controls">
+              <button id="fullscreen-shuffle" class="control-btn"><i class="fas fa-shuffle"></i></button>
+              <button id="fullscreen-prev" class="control-btn"><i class="fas fa-backward-step"></i></button>
+              <button id="fullscreen-play-pause" class="control-btn play-btn"><i class="fas fa-play"></i></button>
+              <button id="fullscreen-next" class="control-btn"><i class="fas fa-forward-step"></i></button>
+              <button id="fullscreen-loop" class="control-btn"><i class="fas fa-repeat"></i></button>
+            </div>
+            
+            <div class="fullscreen-actions">
+              <button id="fullscreen-like" class="icon-btn"><i class="fa-regular fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <audio id="audio-player" hidden></audio>
+    <script src="app-new.js"></script>
+  </body>
 </html>
