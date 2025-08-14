@@ -66,6 +66,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentSongArtist = document.getElementById('current-song-artist');
     const likeBtn = document.getElementById('like-btn');
     
+    // Mobile expanded controls elements
+    const mobileExpandBtn = document.getElementById('mobile-expand-btn');
+    const mobileExpandedControls = document.getElementById('mobile-expanded-controls');
+    const mobilePlayPauseBtn = document.getElementById('mobile-play-pause-btn');
+    const mobilePrevBtn = document.getElementById('mobile-prev-btn');
+    const mobileNextBtn = document.getElementById('mobile-next-btn');
+    const mobileShuffleBtn = document.getElementById('mobile-shuffle-btn');
+    const mobileLoopBtn = document.getElementById('mobile-loop-btn');
+    const mobileVolumeBtn = document.getElementById('mobile-volume-btn');
+    const mobileVolumeSlider = document.getElementById('mobile-volume-slider');
+    const mobileProgressBar = document.getElementById('mobile-progress-bar');
+    const mobileProgress = document.getElementById('mobile-progress');
+    const mobileCurrentTimeDisplay = document.getElementById('mobile-current-time');
+    const mobileDurationDisplay = document.getElementById('mobile-duration');
+    const mobileCurrentAlbumArt = document.getElementById('mobile-current-album-art');
+    const mobileCurrentSongTitle = document.getElementById('mobile-current-song-title');
+    const mobileCurrentSongArtist = document.getElementById('mobile-current-song-artist');
+    const mobileLikeBtn = document.getElementById('mobile-like-btn');
+    const mobileFullscreenBtn = document.getElementById('mobile-fullscreen-btn');
+    
     // Modal elements
     const likedSongsModal = document.getElementById('liked-songs-modal');
     const createPlaylistModal = document.getElementById('create-playlist-modal');
@@ -150,9 +170,10 @@ document.addEventListener('DOMContentLoaded', function() {
             sidebar?.classList.remove('open');
             sidebarOverlay?.classList.remove('show');
         } else {
-            // Desktop mode: ensure sidebar is visible
+            // Desktop mode: ensure sidebar is visible and close mobile expanded controls
             sidebar?.classList.remove('open');
             sidebarOverlay?.classList.remove('show');
+            closeMobileExpandedControls();
         }
         
         // Update icons after state changes
@@ -206,6 +227,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Progress bar
         progressBar?.addEventListener('click', handleProgressBarClick);
+        
+        // Mobile expanded controls
+        mobileExpandBtn?.addEventListener('click', toggleMobileExpandedControls);
+        mobilePlayPauseBtn?.addEventListener('click', togglePlayPause);
+        mobilePrevBtn?.addEventListener('click', playPrevious);
+        mobileNextBtn?.addEventListener('click', playNext);
+        mobileShuffleBtn?.addEventListener('click', toggleShuffle);
+        mobileLoopBtn?.addEventListener('click', toggleLoop);
+        mobileVolumeBtn?.addEventListener('click', toggleMute);
+        mobileVolumeSlider?.addEventListener('input', handleVolumeChange);
+        mobileProgressBar?.addEventListener('click', handleMobileProgressBarClick);
+        mobileLikeBtn?.addEventListener('click', toggleLike);
+        mobileFullscreenBtn?.addEventListener('click', openFullscreenPlayer);
         
         // Audio player events
         audioPlayer?.addEventListener('timeupdate', updateProgress);
@@ -406,6 +440,160 @@ document.addEventListener('DOMContentLoaded', function() {
             musicPlayer?.classList.add('dark-mode');
             themeToggle.innerHTML = '<i class="fas fa-moon"></i><span>Dark Mode</span>';
             showToast('Switched to dark mode', 'info');
+        }
+    }
+    
+    // Mobile expanded controls functionality
+    function toggleMobileExpandedControls() {
+        const isExpanded = mobileExpandedControls?.classList.contains('show');
+        
+        if (isExpanded) {
+            closeMobileExpandedControls();
+        } else {
+            openMobileExpandedControls();
+        }
+    }
+    
+    function openMobileExpandedControls() {
+        if (mobileExpandedControls) {
+            // Ensure element is visible - force show even on desktop for testing
+            mobileExpandedControls.style.display = 'block';
+            mobileExpandedControls.style.visibility = 'visible';
+            
+            // Use timeout to ensure DOM is ready for animation
+            setTimeout(() => {
+                mobileExpandedControls.classList.add('show');
+            }, 10);
+        }
+        if (mobileExpandBtn) {
+            mobileExpandBtn.classList.add('expanded');
+        }
+        
+        // Update mobile controls with current state
+        updateMobileTrackInfo();
+        updateMobilePlayPauseIcon();
+        updateMobileShuffleState();
+        updateMobileLoopState();
+        updateMobileVolumeState();
+        updateMobileLikeState();
+        
+        showToast('Expanded player controls', 'info');
+    }
+    
+    // Add a global test function (remove this in production)
+    window.testMobileControls = function() {
+        console.log('Testing mobile controls...');
+        console.log('Button element:', mobileExpandBtn);
+        console.log('Controls element:', mobileExpandedControls);
+        toggleMobileExpandedControls();
+    };
+    
+    function closeMobileExpandedControls() {
+        if (mobileExpandedControls) {
+            mobileExpandedControls.classList.remove('show');
+            // Wait for animation to complete before hiding
+            setTimeout(() => {
+                mobileExpandedControls.style.display = 'none';
+                mobileExpandedControls.style.visibility = 'hidden';
+            }, 300); // Match the CSS transition duration
+        }
+        if (mobileExpandBtn) {
+            mobileExpandBtn.classList.remove('expanded');
+        }
+    }
+    
+    function handleMobileProgressBarClick(e) {
+        if (!audioPlayer?.duration) return;
+        
+        const rect = mobileProgressBar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const percentage = clickX / rect.width;
+        const newTime = percentage * audioPlayer.duration;
+        
+        audioPlayer.currentTime = newTime;
+        updateProgress();
+    }
+    
+    function updateMobileTrackInfo() {
+        const currentSong = songs[currentSongIndex];
+        if (!currentSong) return;
+        
+        if (mobileCurrentAlbumArt) {
+            mobileCurrentAlbumArt.src = currentSong.image || 'music.gif';
+        }
+        if (mobileCurrentSongTitle) {
+            mobileCurrentSongTitle.textContent = currentSong.title || 'Just relax and vibe!';
+        }
+        if (mobileCurrentSongArtist) {
+            mobileCurrentSongArtist.textContent = currentSong.artist || '';
+        }
+    }
+    
+    function updateMobilePlayPauseIcon() {
+        const icon = mobilePlayPauseBtn?.querySelector('i');
+        if (icon) {
+            icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
+        }
+    }
+    
+    function updateMobileShuffleState() {
+        if (mobileShuffleBtn) {
+            if (isShuffled) {
+                mobileShuffleBtn.classList.add('active');
+            } else {
+                mobileShuffleBtn.classList.remove('active');
+            }
+        }
+    }
+    
+    function updateMobileLoopState() {
+        if (mobileLoopBtn) {
+            const icon = mobileLoopBtn.querySelector('i');
+            if (loopState === 1) {
+                mobileLoopBtn.classList.add('active');
+                if (icon) icon.className = 'fas fa-repeat-1';
+            } else if (loopState === 2) {
+                mobileLoopBtn.classList.add('active');
+                if (icon) icon.className = 'fas fa-repeat';
+            } else {
+                mobileLoopBtn.classList.remove('active');
+                if (icon) icon.className = 'fas fa-repeat';
+            }
+        }
+    }
+    
+    function updateMobileVolumeState() {
+        if (mobileVolumeSlider) {
+            mobileVolumeSlider.value = currentVolume * 100;
+        }
+        
+        if (mobileVolumeBtn) {
+            const icon = mobileVolumeBtn.querySelector('i');
+            if (icon) {
+                if (currentVolume === 0) {
+                    icon.className = 'fas fa-volume-mute';
+                } else if (currentVolume < 0.5) {
+                    icon.className = 'fas fa-volume-down';
+                } else {
+                    icon.className = 'fas fa-volume-up';
+                }
+            }
+        }
+    }
+    
+    function updateMobileLikeState() {
+        const currentSong = songs[currentSongIndex];
+        if (!currentSong || !mobileLikeBtn) return;
+        
+        const isLiked = likedSongs.some(song => song.title === currentSong.title && song.artist === currentSong.artist);
+        const icon = mobileLikeBtn.querySelector('i');
+        
+        if (isLiked) {
+            mobileLikeBtn.classList.add('liked');
+            if (icon) icon.className = 'fas fa-heart';
+        } else {
+            mobileLikeBtn.classList.remove('liked');
+            if (icon) icon.className = 'fa-regular fa-heart';
         }
     }
     
@@ -688,9 +876,20 @@ document.addEventListener('DOMContentLoaded', function() {
         updateVolumeIcon();
     }
     
-    function handleVolumeChange() {
-        currentVolume = volumeSlider.value / 100;
+    function handleVolumeChange(e) {
+        // Determine which slider was used
+        const slider = e.target;
+        currentVolume = slider.value / 100;
         audioPlayer.volume = currentVolume;
+        
+        // Sync both sliders
+        if (volumeSlider && slider !== volumeSlider) {
+            volumeSlider.value = currentVolume * 100;
+        }
+        if (mobileVolumeSlider && slider !== mobileVolumeSlider) {
+            mobileVolumeSlider.value = currentVolume * 100;
+        }
+        
         updateVolumeIcon();
     }
     
@@ -729,6 +928,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (fullscreenDuration && !isNaN(duration)) {
             fullscreenDuration.textContent = formatTime(duration);
+        }
+        
+        // Update mobile expanded controls progress
+        if (mobileProgress) {
+            mobileProgress.style.width = `${progressPercent}%`;
+        }
+        if (mobileCurrentTimeDisplay) {
+            mobileCurrentTimeDisplay.textContent = formatTime(currentTime);
+        }
+        if (mobileDurationDisplay && !isNaN(duration)) {
+            mobileDurationDisplay.textContent = formatTime(duration);
         }
     }
     
@@ -785,6 +995,11 @@ document.addEventListener('DOMContentLoaded', function() {
         currentSongTitle.textContent = decodeHtmlEntities(song.name);
         currentSongArtist.textContent = decodeHtmlEntities(song.artists?.primary?.[0]?.name || "Unknown Artist");
         currentAlbumArt.src = thumbnail;
+        
+        // Update mobile expanded controls
+        if (mobileCurrentSongTitle) mobileCurrentSongTitle.textContent = decodeHtmlEntities(song.name);
+        if (mobileCurrentSongArtist) mobileCurrentSongArtist.textContent = decodeHtmlEntities(song.artists?.primary?.[0]?.name || "Unknown Artist");
+        if (mobileCurrentAlbumArt) mobileCurrentAlbumArt.src = thumbnail;
         
         // Update fullscreen player
         const fullscreenTitle = document.getElementById('fullscreen-song-title');
@@ -843,7 +1058,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function updatePlayPauseIcon() {
         const icons = [
             playPauseBtn?.querySelector('i'),
-            document.getElementById('fullscreen-play-pause')?.querySelector('i')
+            document.getElementById('fullscreen-play-pause')?.querySelector('i'),
+            mobilePlayPauseBtn?.querySelector('i')
         ];
         
         icons.forEach(icon => {
@@ -856,10 +1072,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateShuffleButton() {
         shuffleBtn?.classList.toggle('active', isShuffled);
         document.getElementById('fullscreen-shuffle')?.classList.toggle('active', isShuffled);
+        mobileShuffleBtn?.classList.toggle('active', isShuffled);
     }
     
     function updateLoopButton() {
-        const buttons = [loopBtn, document.getElementById('fullscreen-loop')];
+        const buttons = [loopBtn, document.getElementById('fullscreen-loop'), mobileLoopBtn];
         
         buttons.forEach(btn => {
             if (!btn) return;
@@ -881,20 +1098,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateVolumeIcon() {
-        if (!volumeBtn) return;
+        const volumeButtons = [volumeBtn, mobileVolumeBtn];
         
-        if (audioPlayer?.volume === 0) {
-            volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-        } else if (audioPlayer.volume < 0.5) {
-            volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
-        } else {
-            volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        }
+        volumeButtons.forEach(btn => {
+            if (!btn) return;
+            
+            if (audioPlayer?.volume === 0) {
+                btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else if (audioPlayer.volume < 0.5) {
+                btn.innerHTML = '<i class="fas fa-volume-down"></i>';
+            } else {
+                btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        });
     }
     
     function updateLikeButton(song) {
         const isLiked = isSongLiked(song);
-        const buttons = [likeBtn, document.getElementById('fullscreen-like')];
+        const buttons = [likeBtn, document.getElementById('fullscreen-like'), mobileLikeBtn];
         
         buttons.forEach(btn => {
             if (!btn) return;
@@ -1717,6 +1938,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!sidebar.contains(e.target) && 
                 !document.getElementById('mobile-menu-toggle')?.contains(e.target)) {
                 closeMobileSidebar();
+            }
+        }
+        
+        // Close mobile expanded controls
+        if (window.innerWidth <= 768 && mobileExpandedControls?.classList.contains('show')) {
+            if (!mobileExpandedControls.contains(e.target) && 
+                !mobileExpandBtn?.contains(e.target)) {
+                closeMobileExpandedControls();
             }
         }
     }

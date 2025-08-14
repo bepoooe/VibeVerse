@@ -141,11 +141,61 @@
         </div>
 
         <div class="now-playing-right">
+          <!-- Mobile expand button (visible only on mobile) -->
+          <button id="mobile-expand-btn" class="mobile-expand-btn" title="Expand controls">
+            <i class="fas fa-chevron-up"></i>
+          </button>
+          
           <div id="volume-control" class="volume-control">
             <button id="volume-btn" class="control-btn"><i class="fas fa-volume-up"></i></button>
             <input type="range" id="volume-slider" min="0" max="100" value="50" class="volume-slider">
           </div>
           <button id="fullscreen-btn" class="control-btn"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+
+      <!-- Mobile Expanded Controls (hidden by default, shown when expand button is clicked) -->
+      <div id="mobile-expanded-controls" class="mobile-expanded-controls">
+        <div class="mobile-controls-header">
+          <div class="mobile-track-info">
+            <img id="mobile-current-album-art" src="music.gif" alt="Album Art" class="mobile-track-image">
+            <div class="mobile-track-details">
+              <div id="mobile-current-song-title" class="mobile-track-title">Just relax and vibe!</div>
+              <div id="mobile-current-song-artist" class="mobile-track-artist"></div>
+            </div>
+            <button id="mobile-like-btn" class="icon-btn mobile-like-btn">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="mobile-controls-main">
+          <div class="mobile-player-controls">
+            <button id="mobile-shuffle-btn" class="mobile-control-btn"><i class="fas fa-shuffle"></i></button>
+            <button id="mobile-prev-btn" class="mobile-control-btn"><i class="fas fa-backward-step"></i></button>
+            <button id="mobile-play-pause-btn" class="mobile-control-btn mobile-play-btn"><i class="fas fa-play"></i></button>
+            <button id="mobile-next-btn" class="mobile-control-btn"><i class="fas fa-forward-step"></i></button>
+            <button id="mobile-loop-btn" class="mobile-control-btn"><i class="fas fa-repeat"></i></button>
+          </div>
+          
+          <div class="mobile-progress-container">
+            <div class="mobile-time-info">
+              <span id="mobile-current-time" class="mobile-time-display">0:00</span>
+              <span id="mobile-duration" class="mobile-time-display">0:00</span>
+            </div>
+            <div id="mobile-progress-bar" class="mobile-progress-bar">
+              <div id="mobile-progress" class="mobile-progress"></div>
+              <div id="mobile-wave-progress" class="mobile-wave-progress"></div>
+            </div>
+          </div>
+          
+          <div class="mobile-additional-controls">
+            <div class="mobile-volume-control">
+              <button id="mobile-volume-btn" class="mobile-control-btn"><i class="fas fa-volume-up"></i></button>
+              <input type="range" id="mobile-volume-slider" min="0" max="100" value="50" class="mobile-volume-slider">
+            </div>
+            <button id="mobile-fullscreen-btn" class="mobile-control-btn"><i class="fas fa-expand"></i></button>
+          </div>
         </div>
       </div>
 
