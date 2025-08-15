@@ -2,6 +2,8 @@
 // Maintains original functionality while adding new features
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Starting initialization');
+    
     // Global variables
     let currentSongIndex = 0;
     let songs = [];
@@ -91,10 +93,165 @@ document.addEventListener('DOMContentLoaded', function() {
     const createPlaylistModal = document.getElementById('create-playlist-modal');
     const fullscreenPlayer = document.getElementById('fullscreen-player');
     
+    // Make functions globally accessible immediately
+    window.openLikedSongsModal = function() {
+        console.log('Global openLikedSongsModal called');
+        const modal = document.getElementById('liked-songs-modal');
+        console.log('Modal element:', modal);
+        console.log('Modal classes before:', modal ? modal.className : 'null');
+        
+        if (modal) {
+            // Render liked songs list
+            const likedSongsList = document.getElementById('liked-songs-list');
+            if (likedSongsList) {
+                const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+                if (likedSongs.length === 0) {
+                    likedSongsList.innerHTML = '<div class="search-no-results">No liked songs yet!</div>';
+                } else {
+                    likedSongsList.innerHTML = '<div class="search-no-results">You have ' + likedSongs.length + ' liked songs!</div>';
+                }
+            }
+            
+            // Force remove hidden class and show
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            modal.style.zIndex = '9999';
+            modal.style.background = 'rgba(0, 0, 0, 0.8)';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.right = '0';
+            modal.style.bottom = '0';
+            
+            console.log('Modal classes after:', modal.className);
+            console.log('Modal display style:', modal.style.display);
+            console.log('Modal visibility:', window.getComputedStyle(modal).display);
+        } else {
+            console.log('Liked songs modal element not found');
+        }
+    };
+    
+    window.openCreatePlaylistModal = function() {
+        console.log('Global openCreatePlaylistModal called');
+        const modal = document.getElementById('create-playlist-modal');
+        console.log('Modal element:', modal);
+        console.log('Modal classes before:', modal ? modal.className : 'null');
+        
+        if (modal) {
+            const nameInput = document.getElementById('playlist-name');
+            const descInput = document.getElementById('playlist-description');
+            
+            if (nameInput) nameInput.value = '';
+            if (descInput) descInput.value = '';
+            
+            // Force remove hidden class and show
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            modal.style.zIndex = '9999';
+            modal.style.background = 'rgba(0, 0, 0, 0.8)';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.right = '0';
+            modal.style.bottom = '0';
+            
+            console.log('Modal classes after:', modal.className);
+            console.log('Modal display style:', modal.style.display);
+            console.log('Modal visibility:', window.getComputedStyle(modal).display);
+            
+            if (nameInput) nameInput.focus();
+        } else {
+            console.log('Create playlist modal element not found');
+        }
+    };
+    
+    // Add close functions globally as well
+    window.closeLikedSongsModal = function() {
+        const modal = document.getElementById('liked-songs-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        }
+    };
+    
+    window.closeCreatePlaylistModal = function() {
+        const modal = document.getElementById('create-playlist-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
+        }
+    };
+    
+    // Set up close button event listeners immediately
+    setTimeout(() => {
+        const closeLiked = document.getElementById('close-liked-songs');
+        const closeCreate = document.getElementById('close-create-playlist');
+        
+        if (closeLiked) {
+            closeLiked.onclick = window.closeLikedSongsModal;
+        }
+        if (closeCreate) {
+            closeCreate.onclick = window.closeCreatePlaylistModal;
+        }
+        
+        // Also handle escape key and backdrop clicks
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                window.closeLikedSongsModal();
+                window.closeCreatePlaylistModal();
+            }
+        });
+        
+        // Handle backdrop clicks
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    if (modal.id === 'liked-songs-modal') {
+                        window.closeLikedSongsModal();
+                    } else if (modal.id === 'create-playlist-modal') {
+                        window.closeCreatePlaylistModal();
+                    }
+                }
+            });
+        });
+    }, 200);
+    
     // Initialize the app
     init();
     
+    // Additional direct event listeners as fallback
+    setTimeout(() => {
+        console.log('Setting up direct event listeners');
+        
+        // Direct event listeners for problematic buttons
+        const createBtn = document.getElementById('create-playlist-btn');
+        const likedBtn = document.getElementById('liked-songs-nav');
+        
+        console.log('Create button found:', createBtn);
+        console.log('Liked button found:', likedBtn);
+        
+        if (createBtn) {
+            createBtn.onclick = function(e) {
+                e.preventDefault();
+                console.log('Create playlist clicked via onclick');
+                openCreatePlaylistModal();
+                return false;
+            };
+        }
+        
+        if (likedBtn) {
+            likedBtn.onclick = function(e) {
+                e.preventDefault();
+                console.log('Liked songs clicked via onclick');
+                openLikedSongsModal();
+                return false;
+            };
+        }
+    }, 500);
+    
     function init() {
+        console.log('Initializing VibeVerse...');
         loadCustomSongs();
         setupEventListeners();
         setupNavigation();
@@ -108,6 +265,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set initial volume
         audioPlayer.volume = currentVolume;
         volumeSlider.value = currentVolume * 100;
+        
+        console.log('VibeVerse initialization complete');
     }
     
     function initializeSidebar() {
@@ -276,23 +435,32 @@ document.addEventListener('DOMContentLoaded', function() {
             closeAddToPlaylistModal();
             openCreatePlaylistModal();
         });
+        
+        // Add event delegation for navigation items to ensure they work
+        document.addEventListener('click', (e) => {
+            // Handle create playlist button
+            if (e.target.closest('#create-playlist-btn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                openCreatePlaylistModal();
+                return;
+            }
+            
+            // Handle liked songs nav
+            if (e.target.closest('#liked-songs-nav')) {
+                e.preventDefault();
+                e.stopPropagation();
+                openLikedSongsModal();
+                return;
+            }
+        });
     }
     
     function setupNavigation() {
+        // Set up navigation for regular nav items
         navItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
-                
-                // Handle special cases first
-                if (item.id === 'create-playlist-btn') {
-                    openCreatePlaylistModal();
-                    return;
-                }
-                
-                if (item.id === 'liked-songs-nav') {
-                    openLikedSongsModal();
-                    return;
-                }
                 
                 // Handle regular navigation
                 const section = item.dataset.section;
@@ -301,6 +469,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+        
+        // Set up special buttons with more robust targeting
+        setTimeout(() => {
+            const createPlaylistBtn = document.getElementById('create-playlist-btn');
+            const likedSongsNav = document.getElementById('liked-songs-nav');
+            
+            if (createPlaylistBtn) {
+                createPlaylistBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openCreatePlaylistModal();
+                });
+            }
+            
+            if (likedSongsNav) {
+                likedSongsNav.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openLikedSongsModal();
+                });
+            }
+        }, 100);
     }
     
     function setupPlayer() {
@@ -1165,13 +1355,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function openLikedSongsModal() {
+        console.log('openLikedSongsModal called');
         renderLikedSongsList();
-        likedSongsModal?.classList.remove('hidden');
+        if (likedSongsModal) {
+            likedSongsModal.classList.remove('hidden');
+            console.log('Liked songs modal shown');
+        } else {
+            console.log('Liked songs modal element not found');
+        }
     }
     
     function closeLikedSongsModal() {
         likedSongsModal?.classList.add('hidden');
     }
+    
+    // Make functions globally accessible for debugging
+    window.openLikedSongsModal = openLikedSongsModal;
+    window.openCreatePlaylistModal = openCreatePlaylistModal;
     
     function renderLikedSongsList() {
         const likedSongsList = document.getElementById('liked-songs-list');
@@ -1223,14 +1423,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Playlist functionality
     function openCreatePlaylistModal() {
+        console.log('openCreatePlaylistModal called');
         const nameInput = document.getElementById('playlist-name');
         const descInput = document.getElementById('playlist-description');
         
         if (nameInput) nameInput.value = '';
         if (descInput) descInput.value = '';
         
-        createPlaylistModal?.classList.remove('hidden');
-        nameInput?.focus();
+        if (createPlaylistModal) {
+            createPlaylistModal.classList.remove('hidden');
+            if (nameInput) nameInput.focus();
+            console.log('Create playlist modal shown');
+        } else {
+            console.log('Create playlist modal element not found');
+        }
     }
     
     function closeCreatePlaylistModal() {
